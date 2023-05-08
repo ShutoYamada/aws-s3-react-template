@@ -1,14 +1,61 @@
-# Welcome to your CDK TypeScript project
+# AWS S3 React Template
+This repository contains an AWS CDK project that sets up infrastructure for hosting a static React application on Amazon S3, utilizing AWS CodeCommit for source control and AWS CodePipeline for automated deployments.
 
-This is a blank project for CDK development with TypeScript.
+# Prerequisites
+- AWS account
+- AWS CLI installed and configured
+- Node.js installed (version 14.x or higher)
+- AWS CDK installed (version 2.x or higher)
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+# Project structure
 
-## Useful commands
+```
+.
+├── bin
+│   └── aws-s3-react-template.ts        # CDK application entry point
+├── lib
+│   └── aws-s3-react-template-stack.ts  # Stack definition (contains the code you provided)
+├── package.json         # Project dependencies
+└── README.md            # This file
+```
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `cdk deploy`      deploy this stack to your default AWS account/region
-* `cdk diff`        compare deployed stack with current state
-* `cdk synth`       emits the synthesized CloudFormation template
+# Usage
+1. Clone this repository.
+```
+git clone <repository-url>
+```
+2. Install the dependencies.
+```
+yarn
+```
+3. Set Enviroment Parameters.
+Please copy the local .env.sample file to a new file named .env and fill in the necessary values.
+4. Deploy the CDK stack.
+```
+cdk deploy
+```
+The stack deployment will create the Amazon S3 bucket, AWS CodeCommit repository, and AWS CodePipeline. The output will include the repository clone URLs, username, and password.
+5. Clone the created CodeCommit repository and add your React application source code.
+```
+git clone <repository-clone-url-http>
+```
+Commit and push the changes to the master branch. The CodePipeline will automatically detect changes and deploy the updated React application to the Amazon S3 bucket.
+6. Cleanup
+To delete the created resources, run:
+```
+cdk destroy
+```
+
+Note that this will remove the S3 bucket, CodeCommit repository, and CodePipeline.
+
+# Additional Resources
+- [AWS CDK Documentation](https://docs.aws.amazon.com/cdk/v2/guide/home.html)
+- [Amazon S3 Documentation](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html)
+- [AWS CodeCommit Documentation](https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html)
+- [AWS CodePipeline Documentation](https://docs.aws.amazon.com/codepipeline/latest/userguide/welcome.html)
+
+# Contributing
+Feel free to submit issues or pull requests for improvements or bug fixes.
+
+# License
+This project is licensed under the MIT License.
