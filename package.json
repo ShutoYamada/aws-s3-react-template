@@ -8,7 +8,9 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "dotenv cross-var cdk",
+    "deploy": "yarn cdk deploy '*' --hotswap",
+    "destroy": "yarn cdk destroy"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",

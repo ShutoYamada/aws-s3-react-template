@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as codecommit from 'aws-cdk-lib/aws-codecommit';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
+import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
@@ -30,7 +31,7 @@ export class AwsS3ReactTemplateStack extends cdk.Stack {
       autoDeleteObjects: true,
       publicReadAccess: true,
       websiteIndexDocument: 'index.html',
-      //blockPublicAccess: BlockPublicAccess.BLOCK_ACLS,
+      blockPublicAccess: BlockPublicAccess.BLOCK_ACLS,
       accessControl: BucketAccessControl.BUCKET_OWNER_FULL_CONTROL
     });
 
@@ -52,24 +53,45 @@ export class AwsS3ReactTemplateStack extends cdk.Stack {
     // Create a CodePipeline.
     const pipeline = new codepipeline.Pipeline(this, 'MyPipeline');
 
-    // Add action to get source from CodeCommit.
     const sourceOutput = new codepipeline.Artifact();
+    const buildOutput = new codepipeline.Artifact();
+
+    // Add action to get source from CodeCommit.
     const sourceAction = new codepipeline_actions.CodeCommitSourceAction({
       actionName: 'Source',
       repository: codeCommitRepo,
       output: sourceOutput,
-      branch: 'master'
+      branch: 'master',
+      runOrder: 1
     });
     pipeline.addStage({
       stageName: 'Source',
       actions: [sourceAction]
     });
 
+    // Add action to build.
+    const buildAction = new codepipeline_actions.CodeBuildAction({
+      actionName: 'Build',
+      project: new codebuild.PipelineProject(this, `BuildProject`, {
+        environment: {
+          buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_3
+        }
+      }),
+      runOrder: 2,
+      input: sourceOutput,
+      outputs: [buildOutput]
+    });
+    pipeline.addStage({
+      stageName: 'Build',
+      actions: [buildAction]
+    });
+
     // Add action to deploy to S3 bucket.
     const deployAction = new codepipeline_actions.S3DeployAction({
       actionName: 'Deploy',
-      input: sourceOutput,
-      bucket: s3Bucket
+      input: buildOutput,
+      bucket: s3Bucket,
+      runOrder: 3
     });
     pipeline.addStage({
       stageName: 'Deploy',
@@ -82,12 +104,6 @@ export class AwsS3ReactTemplateStack extends cdk.Stack {
     });
     new cdk.CfnOutput(this, 'CodeCommitCloneUrlSsh', {
       value: codeCommitRepo.repositoryCloneUrlSsh
-    });
-    new cdk.CfnOutput(this, 'CodeCommitUsername', {
-      value: codeCommitRepo.repositoryCloneUrlHttp.split('//')[1].split(':')[0]
-    });
-    new cdk.CfnOutput(this, 'CodeCommitPassword', {
-      value: codeCommitRepo.repositoryCloneUrlHttp.split('//')[1].split(':')[1]
     });
   }
 }

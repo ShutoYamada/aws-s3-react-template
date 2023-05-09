@@ -29,21 +29,46 @@ git clone <repository-url>
 yarn
 ```
 3. Set Enviroment Parameters.
-Please copy the local .env.sample file to a new file named .env and fill in the necessary values.
+Please copy the local `.env.sample` file to a new file named `.env` and fill in the necessary values.
 4. Deploy the CDK stack.
 ```
-cdk deploy
+yarn deploy
 ```
 The stack deployment will create the Amazon S3 bucket, AWS CodeCommit repository, and AWS CodePipeline. The output will include the repository clone URLs, username, and password.
 5. Clone the created CodeCommit repository and add your React application source code.
 ```
 git clone <repository-clone-url-http>
 ```
+
+Please create a `buildspec.yml` file for your React project with the following format:
+```yml
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - n 16.15.0
+      - npm i yarn
+      - yarn
+  build:
+    commands:
+      - yarn run build
+
+artifacts:
+  base-directory: build
+  files:
+    - "**/*"
+
+cache:
+  paths:
+    - node_modules/**/*
+```
+
 Commit and push the changes to the master branch. The CodePipeline will automatically detect changes and deploy the updated React application to the Amazon S3 bucket.
 6. Cleanup
 To delete the created resources, run:
 ```
-cdk destroy
+yarn destroy
 ```
 
 Note that this will remove the S3 bucket, CodeCommit repository, and CodePipeline.
