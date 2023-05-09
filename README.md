@@ -20,22 +20,22 @@ This repository contains an AWS CDK project that sets up infrastructure for host
 ```
 
 # Usage
-1. Clone this repository.
+## 1.Clone this repository.
 ```
 git clone <repository-url>
 ```
-2. Install the dependencies.
+## 2.Install the dependencies.
 ```
 yarn
 ```
-3. Set Enviroment Parameters.
+## 3.Set Enviroment Parameters.
 Please copy the local `.env.sample` file to a new file named `.env` and fill in the necessary values.
-4. Deploy the CDK stack.
+## 4.Deploy the CDK stack.
 ```
 yarn deploy
 ```
 The stack deployment will create the Amazon S3 bucket, AWS CodeCommit repository, and AWS CodePipeline. The output will include the repository clone URLs, username, and password.
-5. Clone the created CodeCommit repository and add your React application source code.
+## 5.Clone the created CodeCommit repository and add your React application source code.
 ```
 git clone <repository-clone-url-http>
 ```
@@ -65,7 +65,7 @@ cache:
 ```
 
 Commit and push the changes to the master branch. The CodePipeline will automatically detect changes and deploy the updated React application to the Amazon S3 bucket.
-6. Cleanup
+## 6.Cleanup
 To delete the created resources, run:
 ```
 yarn destroy
