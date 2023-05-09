@@ -34,7 +34,7 @@ Please copy the local `.env.sample` file to a new file named `.env` and fill in 
 ```
 yarn deploy
 ```
-The stack deployment will create the Amazon S3 bucket, AWS CodeCommit repository, and AWS CodePipeline. The output will include the repository clone URLs, username, and password.
+The stack deployment will create the Amazon S3 bucket, AWS CodeCommit repository, and AWS CodePipeline. The output will include the repository clone URLs.
 ## 5.Clone the created CodeCommit repository and add your React application source code.
 ```
 git clone <repository-clone-url-http>
