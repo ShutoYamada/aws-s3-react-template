@@ -22,7 +22,7 @@ This repository contains an AWS CDK project that sets up infrastructure for host
 # Usage
 ## 1.Clone this repository.
 ```
-git clone <repository-url>
+git clone https://github.com/ShutoYamada/aws-s3-react-template.git
 ```
 ## 2.Install the dependencies.
 ```
