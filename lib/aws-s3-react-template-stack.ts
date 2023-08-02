@@ -105,5 +105,8 @@ export class AwsS3ReactTemplateStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'CodeCommitCloneUrlSsh', {
       value: codeCommitRepo.repositoryCloneUrlSsh
     });
+    new cdk.CfnOutput(this, 'StaticSiteUrl', {
+      value: s3Bucket.bucketWebsiteUrl
+    });
   }
 }

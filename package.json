@@ -8,7 +8,9 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
+    "postinstall": "node -e \"require('fs').copyFileSync('.env.sample', '.env')\"",
     "cdk": "dotenv cross-var cdk",
+    "bootstrap": "yarn cdk bootstrap",
     "deploy": "yarn cdk deploy '*' --hotswap",
     "destroy": "yarn cdk destroy"
   },

@@ -10,6 +10,7 @@ export type Env = {
   AWS_DEFAULT_REGION: string;
   S3_BUCKET_NAME: string;
   CODECOMMIT_REPOSITORY_NAME: string;
+  STACK_PREFIX: string;
 };
 
 const {
@@ -18,7 +19,8 @@ const {
   AWS_SECRET_ACCESS_KEY,
   AWS_DEFAULT_REGION,
   S3_BUCKET_NAME,
-  CODECOMMIT_REPOSITORY_NAME
+  CODECOMMIT_REPOSITORY_NAME,
+  STACK_PREFIX
 } = process.env as Env;
 
 // Validate Parameters.
@@ -28,12 +30,13 @@ if (
   !AWS_SECRET_ACCESS_KEY ||
   !AWS_DEFAULT_REGION ||
   !S3_BUCKET_NAME ||
-  !CODECOMMIT_REPOSITORY_NAME
+  !CODECOMMIT_REPOSITORY_NAME ||
+  !STACK_PREFIX
 )
   throw new Error('The required parameter has not been specified.');
 
 const app = new cdk.App();
-new AwsS3ReactTemplateStack(app, 'AwsS3ReactTemplateStack', {
+new AwsS3ReactTemplateStack(app, `${STACK_PREFIX}AwsS3ReactTemplateStack`, {
   env: {
     account: AWS_ACCOUNT_ID,
     region: AWS_DEFAULT_REGION
